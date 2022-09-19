@@ -64,10 +64,12 @@ const dataStore = {
  * @returns {{numAcademics: number}} object
  */
 function getNumAcademics() {
-  // TODO: Observe the return object, then replace with your implementation
-  // to work on dataStores with a different number of academics and courses.
+  let count = 0;
+  for (const key in dataStore.academics) {
+    count++; 
+  }
   return {
-    numAcademics: -1,
+    numAcademics: count,
   };
 }
 
@@ -75,10 +77,12 @@ function getNumAcademics() {
  * @returns {{numCourses: number}}
  */
 function getNumCourses() {
-  // TODO: Observe the return object, then replace with your implementation
-  // to work on dataStores with a different number of academics and courses.
+  let count = 0;
+  for (const key in dataStore.courses) {
+    count++; 
+  }
   return {
-    numCourses: -1,
+    numCourses: count,
   };
 }
 
@@ -88,13 +92,18 @@ function getNumCourses() {
  * @returns {{error: string}} on error
  */
 function getAcademicDetailsFromId(academicId) {
-  // TODO: Observe the return object, then replace with your implementation
-  // to work on dataStores with a different number of academics and courses.
+  for (const key in dataStore.academics) {
+    if (academicId === dataStore.academics[key].id) {
+      return {
+        academic: {
+          name: dataStore.academics[key].name,
+          hobby: dataStore.academics[key].hobby,
+        },
+      };
+    }
+  }
   return {
-    academic: {
-      name: 'Ada',
-      hobby: 'music',
-    },
+    error: 'academicID not found',
   };
 }
 
@@ -104,13 +113,18 @@ function getAcademicDetailsFromId(academicId) {
  * @returns {{error: string}} on error
  */
 function getCourseDetailsFromId(courseId) {
-  // TODO: Observe the return object, then replace with your implementation
-  // to work on dataStores with a different number of academics and courses.
+  for (const key in dataStore.courses) {
+    if (courseId === dataStore.courses[key].id) {
+      return {
+        course: {
+          name: dataStore.courses[key].name,
+          description: dataStore.courses[key].description,
+        },
+      };
+    }
+  }
   return {
-    course: {
-      name: 'COMP1511',
-      description: 'Programming Fundamentals',
-    },
+    error: 'courseId not found',
   };
 }
 
@@ -121,8 +135,39 @@ function getCourseDetailsFromId(courseId) {
  * @returns {{error: string}} on error
  */
 function checkAcademicIsMember(academicId, courseId) {
-  // TODO: Observe the return object, then replace with your implementation
-  // to work on dataStores with a different number of academics and courses.
+  // error checking - checks if academicId is valid
+  let validId = false;
+  for (const key in dataStore.academics) {
+    if (dataStore.academics[key].id === academicId) {
+      validId = true;
+    }
+  }
+  if (validId === false) {
+    return {
+      error: 'academicId not found',
+    };
+  }
+  // error checking - checks if courseId is valid
+  validId = false;
+  for (const key in dataStore.courses) {
+    if (dataStore.courses[key].id === courseId) {
+      validId = true;
+    }
+  }
+  if (validId === false) {
+    return {
+      error: 'courseId not found',
+    };
+  }
+
+  for (const key in dataStore.courses) {
+    if ((dataStore.courses[key].id === courseId) &&
+        (dataStore.courses[key].memberIds.includes(academicId))) {
+      return {
+        isMember: true,
+      };
+    }
+  }
   return {
     isMember: false,
   };
@@ -135,8 +180,39 @@ function checkAcademicIsMember(academicId, courseId) {
  * @returns {{error: string}} on error
  */
 function checkAcademicIsStaff(academicId, courseId) {
-  // TODO: Observe the return object, then replace with your implementation
-  // to work on dataStores with a different number of academics and courses.
+  // error checking - checks if academicId is valid
+  let validId = false;
+  for (const key in dataStore.academics) {
+    if (dataStore.academics[key].id === academicId) {
+      validId = true;
+    }
+  }
+  if (validId === false) {
+    return {
+      error: 'academicId not found',
+    };
+  }
+  // error checking - checks if courseId is valid
+  validId = false;
+  for (const key in dataStore.courses) {
+    if (dataStore.courses[key].id === courseId) {
+      validId = true;
+    }
+  }
+  if (validId === false) {
+    return {
+      error: 'courseId not found',
+    };
+  }
+
+  for (const key in dataStore.courses) {
+    if ((dataStore.courses[key].id === courseId) &&
+        (dataStore.courses[key].staffIds.includes(academicId))) {
+      return {
+        isStaff: true,
+      };
+    }
+  }
   return {
     isStaff: false,
   };
@@ -168,6 +244,26 @@ console.log();
 console.log('4. getAcademicDetailsFromId(999999)');
 console.log("Expect: { error: 'any string value' }");
 console.log('Output:', getAcademicDetailsFromId(999999));
+console.log();
+
+console.log('5. getCourseDetailsFromId(1511)');
+console.log('Output:', getCourseDetailsFromId(1511));
+console.log();
+
+console.log('6. checkAcademicIsMember(10, 1511)');
+console.log('Output:', checkAcademicIsMember(10, 1511));
+console.log();
+
+console.log('6. checkAcademicIsMember(10, 1521)');
+console.log('Output:', checkAcademicIsMember(10, 1521));
+console.log();
+
+console.log('7. checkAcademicIsStaff(10, 1511)');
+console.log('Output:', checkAcademicIsStaff(10, 1511));
+console.log();
+
+console.log('7. checkAcademicIsStaff(10, 1521)');
+console.log('Output:', checkAcademicIsStaff(10, 1521));
 console.log();
 
 console.log('// TODO: You can add more debugging console.log here.');
